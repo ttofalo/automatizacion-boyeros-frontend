@@ -6,10 +6,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    host: true
+    host: true,
+    allowedHosts: ['boyeros.elamanecer.com.ar']
   },
   preview: {
     port: 3000,
-    host: true
+    host: true,
+    allowedHosts: ['boyeros.elamanecer.com.ar']
   }
 })
