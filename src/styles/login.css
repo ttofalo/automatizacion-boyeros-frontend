@@ -125,7 +125,8 @@
     padding: 0;
 }
 
-.numpad-btn:active:not(:disabled) {
+.numpad-btn:active:not(:disabled),
+.numpad-btn.numpad-btn-pressed:not(:disabled) {
     transform: scale(0.9);
     background: var(--text-tertiary);
 }
@@ -140,7 +141,8 @@
     color: var(--text-secondary);
 }
 
-.numpad-delete:active:not(:disabled) {
+.numpad-delete:active:not(:disabled),
+.numpad-delete.numpad-btn-pressed:not(:disabled) {
     background: var(--border-color);
 }
 
