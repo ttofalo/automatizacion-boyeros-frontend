@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Zap, Moon, Sun, Plus, Cpu, Linkedin, Github } from 'lucide-react';
+import { Zap, Moon, Sun, Plus, Cpu, Linkedin, Github, LogOut } from 'lucide-react';
 import BoyeroCard from './components/BoyeroCard';
 import EditBoyeroModal from './components/EditBoyeroModal';
 import CreateBoyeroModal from './components/CreateBoyeroModal';
 import CreateEspModal from './components/CreateEspModal';
+import LoginPage from './components/LoginPage';
 import BoyeroService from './services/boyeroService';
+import AuthService from './services/authService';
 import { useBoyeroWebSocket } from './hooks/useBoyeroWebSocket';
 import './styles/main.css';
+import './styles/login.css';
 
 function App() {
     const [boyeros, setBoyeros] = useState([]);
@@ -14,14 +17,36 @@ function App() {
     const [theme, setTheme] = useState(() => {
         return localStorage.getItem('theme') || 'light';
     });
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
     }, [theme]);
 
+    // Check authentication on mount
+    useEffect(() => {
+        const authenticated = AuthService.isAuthenticated();
+        setIsAuthenticated(authenticated);
+
+        if (authenticated) {
+            fetchBoyeros();
+        }
+    }, []);
+
     const toggleTheme = () => {
         setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    };
+
+    const handleLoginSuccess = () => {
+        setIsAuthenticated(true);
+        fetchBoyeros();
+    };
+
+    const handleLogout = () => {
+        AuthService.logout();
+        setIsAuthenticated(false);
+        setBoyeros([]);
     };
 
     const fetchBoyeros = async () => {
@@ -35,10 +60,6 @@ function App() {
         }
     };
 
-    // Initial fetch
-    useEffect(() => {
-        fetchBoyeros();
-    }, []);
 
     // Real-time updates via WebSocket
     useBoyeroWebSocket((data) => {
@@ -84,6 +105,10 @@ function App() {
         setBoyeros(prev => [...prev, newBoyero]);
     };
 
+    if (!isAuthenticated) {
+        return <LoginPage onLoginSuccess={handleLoginSuccess} />;
+    }
+
     return (
         <>
             <header className="app-header">
@@ -117,6 +142,9 @@ function App() {
                             <button className="btn btn-primary" onClick={() => setIsCreateModalOpen(true)}>
                                 <Plus size={16} />
                                 Nuevo Boyero
+                            </button>
+                            <button className="btn btn-secondary" onClick={handleLogout} title="Cerrar sesión">
+                                <LogOut size={16} />
                             </button>
                         </div>
                     </div>
@@ -183,6 +211,9 @@ function App() {
 
             {/* Mobile Floating Actions */}
             <div className="mobile-fab-container">
+                <button className="fab-secondary" onClick={handleLogout} title="Cerrar sesión">
+                    <LogOut size={20} />
+                </button>
                 <button className="fab-secondary" onClick={() => setIsCreateEspModalOpen(true)}>
                     <Cpu size={20} />
                 </button>

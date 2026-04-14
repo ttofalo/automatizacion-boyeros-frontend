@@ -1,0 +1,172 @@
+.login-container {
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-color);
+    overflow: hidden;
+    touch-action: manipulation;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+/* Title */
+.login-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    text-align: center;
+}
+
+/* PIN dots */
+.pin-display {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.pin-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--text-tertiary);
+    background: transparent;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.pin-dot.filled {
+    background: var(--text-primary);
+    border-color: var(--text-primary);
+}
+
+/* Shake animation on wrong PIN */
+.pin-display.shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+}
+
+/* Error */
+.login-error {
+    color: var(--danger-color);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    margin: -1rem 0 0;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Success */
+.login-container {
+    transition: opacity 0.5s ease;
+}
+
+.login-container.login-success {
+    opacity: 0;
+}
+
+.login-box-success {
+    pointer-events: none;
+}
+
+.pin-display.pin-success .pin-dot {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* Numpad */
+.numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 64px);
+    gap: 1rem;
+    justify-content: center;
+}
+
+.numpad-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: none;
+    background: var(--border-color);
+    color: var(--text-primary);
+    font-size: 1.35rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.1s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    padding: 0;
+}
+
+.numpad-btn:active:not(:disabled) {
+    transform: scale(0.9);
+    background: var(--text-tertiary);
+}
+
+.numpad-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.numpad-delete {
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+.numpad-delete:active:not(:disabled) {
+    background: var(--border-color);
+}
+
+.numpad-empty {
+    width: 64px;
+    height: 64px;
+}
+
+/* Small screens */
+@media (max-width: 380px) {
+    .numpad {
+        grid-template-columns: repeat(3, 56px);
+        gap: 0.75rem;
+    }
+
+    .numpad-btn,
+    .numpad-empty {
+        width: 56px;
+        height: 56px;
+    }
+
+    .numpad-btn {
+        font-size: 1.2rem;
+    }
+
+    .login-box {
+        gap: 1.5rem;
+    }
+}
